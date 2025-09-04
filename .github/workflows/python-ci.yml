@@ -1,0 +1,43 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m venv myenv
+          source myenv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install
+
+      # 4. Run linting with Flake8
+      - name: Run Flake8
+        run: |
+          source myenv/bin/activate
+          flake8 scraper tests
+
+      # 5. Run tests
+      - name: Run tests
+        run: |
+          source myenv/bin/activate
+          python -m unittest discover tests
