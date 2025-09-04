@@ -46,11 +46,12 @@ playwright install
 
 ### 1. Generate KW numbers
 
+Generate 20 valid KW starting from WA1M/00070192
 \`\`\`bash
-python generate_kw.py
+python generate_kw.py WA1M 00070192 20
 \`\`\`
 
-This will create \`generated_kw.csv\` with the desired number of KW numbers.
+This will create \`input_kw.csv\` with the desired number of KW numbers.
 
 ---
 
