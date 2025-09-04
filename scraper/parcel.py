@@ -1,7 +1,16 @@
 from playwright.sync_api import sync_playwright, TimeoutError
 
 
-def get_parcel_number(kod: str, number: str, control_digit: str) -> str:
+def get_parcel_data(kod: str, number: str, control_digit: str) -> dict:
+    """
+    Scrape KW data:
+    - Typ księgi wieczystej
+    - Położenie
+    - Właściciel / użytkownik wieczysty / uprawniony
+    - Parcel number (after opening KW content)
+
+    Returns dict with fields or None if not available.
+    """
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True)
         context = browser.new_context(
@@ -13,7 +22,7 @@ def get_parcel_number(kod: str, number: str, control_digit: str) -> str:
             viewport={"width": 1280, "height": 800},
         )
         page = context.new_page()
-        page.set_default_timeout(60000)
+        page.set_default_timeout(20000)
 
         # Go to search page
         page.goto(
@@ -26,27 +35,52 @@ def get_parcel_number(kod: str, number: str, control_digit: str) -> str:
         page.get_by_role("textbox", name="Wpisz cyfrę kontrolną").fill(control_digit)
         page.get_by_role("button", name="Wyszukaj Księgę").click()
 
+        # Check if KW not found
+        if page.locator("text=nie została odnaleziona").count() > 0:
+            browser.close()
+            return None
+        
+        # Extract general info before opening KW content
+        def get_field(label_text: str) -> str | None:
+            locator = page.locator(
+                f"xpath=//label[normalize-space()='{label_text}']/../following-sibling::div//div[@class='left']"
+            )
+            if locator.count() > 0:
+                return locator.first.inner_text().strip()
+            return None
+
+        typ_ksiegi = get_field("Typ księgi wieczystej")
+        polozenie = get_field("Położenie")
+        wlasciciel = get_field(
+            "Właściciel / użytkownik wieczysty / uprawniony"
+        )
+
+        parcel_number = None
         # Try to open KW content
         try:
             button = page.get_by_role(
                 "button", name="Przeglądanie aktualnej treści KW", exact=True
             )
-            if button.count() == 0:
-                return None
-            button.click()
-        except TimeoutError:
-            return None
+            if button.count() > 0:
+                button.click()
 
-        # Grab parcel number
-        locator = page.locator(
-            "xpath=//td[normalize-space()='Identyfikator działki']/following-sibling::td[1]"
-        )
-        try:
-            locator.wait_for(state="visible", timeout=10000)
+                locator = page.locator(
+                    "xpath=//td[normalize-space()='Identyfikator działki']/following-sibling::td[1]"
+                )
+                try:
+                    locator.wait_for(state="visible", timeout=10000)
+                    if locator.count() > 0:
+                        parcel_number = locator.first.inner_text().strip()
+                except TimeoutError:
+                    parcel_number = None
         except TimeoutError:
-            return None
-
-        parcel_number = locator.first.inner_text().strip() if locator.count() > 0 else None
+            parcel_number = None
 
         browser.close()
-        return parcel_number
+
+        return {
+            "typ_ksiegi": typ_ksiegi,
+            "polozenie": polozenie,
+            "wlasciciel": wlasciciel,
+            "parcel_number": parcel_number,
+        }
