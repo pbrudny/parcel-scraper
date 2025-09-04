@@ -6,6 +6,9 @@ def scrape_kw_from_csv(input_csv: str, output_csv: str) -> None:
     """
     Read KW numbers from input CSV, scrape parcel numbers, and write results
     to output CSV.
+
+    If scraping fails or parcel number is not found, the output will contain
+    'Brak Identyfikatora Działki'.
     """
     with open(input_csv, newline="", encoding="utf-8") as infile, open(
         output_csv, "w", newline="", encoding="utf-8"
@@ -20,7 +23,13 @@ def scrape_kw_from_csv(input_csv: str, output_csv: str) -> None:
             number = row["number"]
             control_digit = row["control_digit"]
 
-            parcel_number = get_parcel_number(kod, number, control_digit)
+            try:
+                parcel_number = get_parcel_number(kod, number, control_digit)
+                if not parcel_number:
+                    parcel_number = "Brak Identyfikatora Działki"
+            except Exception:
+                parcel_number = "Brak Identyfikatora Działki"
+
             row["parcel_number"] = parcel_number
             writer.writerow(row)
             print(f"{kod}-{number}-{control_digit} -> {parcel_number}")
