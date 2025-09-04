@@ -1,64 +1,104 @@
-# parcel-scraper
+# Property Scraper
 
-Python scraper to extract parcel numbers from the Polish KW portal.  
-⚠️ This scraper is **just for learning purposes**.
+This project allows you to scrape parcel numbers ("Numer działki") from Polish land registry (KW) for given KW numbers.  
+It also contains a separate script to **generate KW numbers** for a specific region.
 
-## Installation
+> ⚠️ This scraper is for **learning purposes only**.
 
-```bash
-git clone https://github.com/pbrudny/parcel-scraper
-cd parcel-scraper
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-pip install -r requirements.txt
-playwright install
-```
-
-## Usage
-
-```bash
-python main.py
-```
-
-Example output:
-
-```
-KW WA6M/00070392/3 → Parcel Number: 15/13
-```
-
-## Running Tests
-
-Basic tests are included in the `tests/` folder. To run them:
-
-```bash
-python -m unittest discover tests
-```
-
-or if using `pytest`:
-
-```bash
-pytest tests
-```
-
-## Linting & Formatting
-
-Check code style with Flake8:
-
-```bash
-flake8 .
-```
-
-Format code automatically with Black:
-
-```bash
-black .
-```
-
-> Optionally, you can set up pre-commit hooks to run Black and Flake8 automatically on each commit.
+---
 
 ## Project Structure
 
-- `scraper/` – main scraper module
-- `tests/` – test scripts
-- `main.py` – CLI entry point
+\`\`\`
+parcel-scraper/
+├── main.py                # Scrapes parcel numbers from input CSV -> output CSV
+├── generate_kw.py         # Generates KW numbers to CSV
+├── scraper/
+│   └── parcel.py          # Function get_parcel_number
+├── tests/                 # Unit tests with Playwright mocks
+├── input_kw.csv           # Sample input CSV for scraper
+├── output_parcels.csv     # Scraper output CSV
+├── generated_kw.csv       # Output from generate_kw.py
+├── requirements.txt
+├── pyproject.toml
+├── README.md
+└── venv/
+\`\`\`
+
+---
+
+## Installation
+
+\`\`\`bash
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate   # macOS/Linux
+# venv\Scripts\activate    # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+playwright install
+\`\`\`
+
+---
+
+## Usage
+
+### 1. Generate KW numbers
+
+\`\`\`bash
+python generate_kw.py
+\`\`\`
+
+This will create \`generated_kw.csv\` with the desired number of KW numbers.
+
+---
+
+### 2. Scrape parcel numbers from CSV
+
+\`\`\`bash
+python main.py
+\`\`\`
+
+Reads KW numbers from \`input_kw.csv\` and writes results to \`output_parcels.csv\`.  
+If a parcel number cannot be scraped, the CSV will contain:
+
+\`\`\`
+brak Identyfikatora Działki
+\`\`\`
+
+---
+
+## Testing & Linting
+
+Run tests:
+
+\`\`\`bash
+pytest tests
+\`\`\`
+
+Check code formatting with **Black**:
+
+\`\`\`bash
+black .
+\`\`\`
+
+Check code quality with **Flake8**:
+
+\`\`\`bash
+flake8 .
+\`\`\`
+
+---
+
+## Notes
+
+- Only for learning purposes.  
+- Do **not** use against public services without permission.  
+- Headless scraping might be blocked by the website. Use \`headless=False\` if necessary.
+
+---
+
+## License
+
+MIT License © 2025 Piotr Brudny
