@@ -1,14 +1,14 @@
 import csv
 import argparse
-import pdb
+
 
 def calculate_kw_check_digit(court_code, kw_number):
     """
     Calculates the check digit for Polish land registry (księga wieczysta) number.
     
     Args:
-        court_code (str): 4-character court code (e.g., "WA1G")
-        kw_number (str): 8-digit land registry number (e.g., "00070392")
+        court_code (str): 4-character court code (e.g., "BI3P")
+        kw_number (str): 8-digit land registry number (e.g., "00070112")
     
     Returns:
         int: Check digit (0-9)
@@ -103,14 +103,14 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python generate_kw.py WA1G 00070392 10
-  python generate_kw.py WA1G 00070392 10 -o output.csv
+  python generate_kw.py BI3P 00070112 10
+  python generate_kw.py BI3P 00070112 10 -o output.csv
   python generate_kw.py --help
         """
     )
     
-    parser.add_argument('court_code', help='4-character court code (e.g., WA1G)')
-    parser.add_argument('starting_number', help='8-digit starting KW number (e.g., 00070392)')
+    parser.add_argument('court_code', help='4-character court code (e.g., BI3P)')
+    parser.add_argument('starting_number', help='8-digit starting KW number (e.g., 00070112)')
     parser.add_argument('count', type=int, help='Number of KW numbers to generate')
     parser.add_argument('-o', '--output', default='input_kw.csv', 
                        help='Output CSV filename (default: input_kw.csv)')
@@ -148,5 +148,4 @@ Examples:
 
 
 if __name__ == "__main__":
-    pdb.set_trace()
     main()
