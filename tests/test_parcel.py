@@ -18,7 +18,9 @@ class TestParcelScraper(unittest.TestCase):
         mock_locator = MagicMock()
 
         # Setup the mock hierarchy
-        mock_playwright.return_value.__enter__.return_value.chromium.launch.return_value = mock_browser
+        mock_playwright.return_value.__enter__.return_value.chromium.launch.return_value = (
+            mock_browser
+        )
         mock_browser.new_context.return_value = mock_context
         mock_context.new_page.return_value = mock_page
         mock_page.locator.return_value = mock_locator
@@ -28,7 +30,7 @@ class TestParcelScraper(unittest.TestCase):
         mock_locator.first.inner_text.return_value = "140504_5.0076.14/18"
 
         # Call the function (uses mocked browser)
-     
+
         parcel_number = get_parcel_number("WA6M", "00538393", "0")
 
         # Assertions
@@ -46,7 +48,9 @@ class TestParcelScraper(unittest.TestCase):
         mock_page = MagicMock()
         mock_locator = MagicMock()
 
-        mock_playwright.return_value.__enter__.return_value.chromium.launch.return_value = mock_browser
+        mock_playwright.return_value.__enter__.return_value.chromium.launch.return_value = (
+            mock_browser
+        )
         mock_browser.new_context.return_value = mock_context
         mock_context.new_page.return_value = mock_page
         mock_page.locator.return_value = mock_locator
