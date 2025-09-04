@@ -1,4 +1,4 @@
-# property-scraper
+# parcel-scraper
 
 Python scraper to extract parcel numbers from the Polish KW portal.  
 ⚠️ This scraper is **just for learning purposes**.
@@ -6,8 +6,8 @@ Python scraper to extract parcel numbers from the Polish KW portal.
 ## Installation
 
 ```bash
-git clone https://github.com/pbrudny/property-scraper
-cd property-scraper
+git clone https://github.com/pbrudny/parcel-scraper
+cd parcel-scraper
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
