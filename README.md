@@ -9,7 +9,7 @@ It also contains a separate script to **generate KW numbers** for a specific reg
 
 ## Project Structure
 
-\`\`\`
+```
 parcel-scraper/
 ├── main.py                # Scrapes parcel numbers from input CSV -> output CSV
 ├── generate_kw.py         # Generates KW numbers to CSV
@@ -23,13 +23,13 @@ parcel-scraper/
 ├── pyproject.toml
 ├── README.md
 └── venv/
-\`\`\`
+```
 
 ---
 
 ## Installation
 
-\`\`\`bash
+```bash
 # Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate   # macOS/Linux
@@ -38,7 +38,7 @@ source venv/bin/activate   # macOS/Linux
 # Install dependencies
 pip install -r requirements.txt
 playwright install
-\`\`\`
+```
 
 ---
 
@@ -47,26 +47,26 @@ playwright install
 ### 1. Generate KW numbers
 
 Generate 20 valid KW starting from WA1M/00070192
-\`\`\`bash
+```bash
 python generate_kw.py WA1M 00070192 20
-\`\`\`
+```
 
-This will create \`input_kw.csv\` with the desired number of KW numbers.
+This will create `input_kw.csv` with the desired number of KW numbers.
 
 ---
 
 ### 2. Scrape parcel numbers from CSV
 
-\`\`\`bash
+```bash
 python main.py
-\`\`\`
+```
 
-Reads KW numbers from \`input_kw.csv\` and writes results to \`output_parcels.csv\`.  
+Reads KW numbers from `input_kw.csv` and writes results to `output_parcels.csv`.  
 If a parcel number cannot be scraped, the CSV will contain:
 
-\`\`\`
+```
 brak Identyfikatora Działki
-\`\`\`
+```
 
 ---
 
@@ -74,21 +74,21 @@ brak Identyfikatora Działki
 
 Run tests:
 
-\`\`\`bash
+```bash
 pytest tests
-\`\`\`
+```
 
 Check code formatting with **Black**:
 
-\`\`\`bash
+```bash
 black .
-\`\`\`
+```
 
 Check code quality with **Flake8**:
 
-\`\`\`bash
+```bash
 flake8 .
-\`\`\`
+```
 
 ---
 
